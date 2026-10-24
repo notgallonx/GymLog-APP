@@ -1,12 +1,12 @@
-const CACHE_NAME = "gym-log-cache-v5";
+const CACHE_NAME = "gym-log-cache-v9";
 const LOCAL_FILES = ["./", "./index.html", "./manifest.json", "./icon.png"];
-const CDN_FILES = ["https://cdn.jsdelivr.net/npm/chart.js"];
+const CDN_FILES = ["https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(async (cache) => {
       await cache.addAll(LOCAL_FILES);
-      // Chart.js da CDN: se fallisce (niente rete) l'installazione non deve rompersi
+      // Chart.js versione fissata da CDN: se fallisce offline l'installazione non si interrompe
       await Promise.allSettled(CDN_FILES.map((u) => cache.add(u)));
     })
   );
@@ -22,8 +22,7 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-// Stale-while-revalidate: risposta immediata dalla cache (ottimo con poco segnale in palestra)
-// e aggiornamento in background, così le nuove versioni arrivano al lancio successivo.
+// Stale-while-revalidate: risposta immediata dalla cache e aggiornamento silente in background
 self.addEventListener("fetch", (event) => {
   const req = event.request;
   if (req.method !== "GET") return;
