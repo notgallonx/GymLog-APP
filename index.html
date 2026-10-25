@@ -1019,6 +1019,44 @@
       display: none;
     }
 
+    .ex-filter-pill {
+      appearance: none;
+      -webkit-appearance: none;
+      flex: 0 0 auto;
+      max-width: 104px;
+      min-height: 34px;
+      padding: 5px 8px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-top-color: rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.11) 0%, rgba(255, 255, 255, 0.045) 100%);
+      color: var(--text-secondary);
+      font-size: 0.68rem;
+      font-weight: 700;
+      line-height: 1.15;
+      text-align: center;
+      white-space: normal;
+      cursor: pointer;
+      transition: background 0.24s var(--spring-ease), border-color 0.24s ease, color 0.24s ease;
+    }
+    .ex-filter-pill.active {
+      background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.3) 0%, rgba(var(--accent-rgb), 0.14) 100%);
+      border-color: rgba(var(--accent-rgb), 0.65);
+      color: var(--text-primary);
+      box-shadow: 0 2px 10px var(--accent-glow);
+    }
+    :root[data-theme="light"] .ex-filter-pill {
+      background: #f1f5f9;
+      border-color: var(--border-color);
+      border-top-color: var(--border-highlight);
+      color: var(--text-secondary);
+    }
+    :root[data-theme="light"] .ex-filter-pill.active {
+      background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.2) 0%, rgba(var(--accent-rgb), 0.1) 100%);
+      border-color: rgba(var(--accent-rgb), 0.6);
+      color: var(--text-primary);
+    }
+
     .ex-jump-pill {
       flex-shrink: 0;
       padding: 6px 12px;
@@ -2290,6 +2328,120 @@
       border-color: rgba(245, 158, 11, 0.4);
       color: #fde047;
     }
+
+    :root[data-theme="light"] {
+      color-scheme: light;
+      --bg-main: #eef2f7;
+      --bg-card: #ffffff;
+      --bg-card-subtle: #f8fafc;
+      --bg-input: #f8fafc;
+      --text-primary: #172033;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --border-color: rgba(15, 23, 42, 0.14);
+      --border-highlight: rgba(15, 23, 42, 0.2);
+      --glass-bg: linear-gradient(155deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.96) 100%);
+      --glass-border: rgba(15, 23, 42, 0.12);
+      --glass-highlight: rgba(255, 255, 255, 0.95);
+      --glass-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    :root[data-theme="light"] body {
+      background-image:
+        radial-gradient(ellipse 90% 45% at 50% -5%, rgba(var(--accent-rgb), 0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 70% 40% at 85% 95%, rgba(99, 102, 241, 0.06) 0%, transparent 65%);
+    }
+
+    :root[data-theme="light"] header {
+      background: rgba(248, 250, 252, 0.9);
+      border-bottom-color: var(--border-color);
+    }
+
+    :root[data-theme="light"] nav {
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(241, 245, 249, 0.98) 100%);
+      border-color: var(--border-color);
+      border-top-color: var(--border-highlight);
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.16);
+    }
+
+    :root[data-theme="light"] .nav-btn {
+      color: #64748b;
+    }
+
+    :root[data-theme="light"] .nav-btn.active {
+      color: #172033;
+    }
+
+    :root[data-theme="light"] .card,
+    :root[data-theme="light"] .stat-card {
+      border-color: var(--glass-border);
+      border-top-color: var(--glass-highlight);
+    }
+
+    :root[data-theme="light"] input,
+    :root[data-theme="light"] select,
+    :root[data-theme="light"] textarea {
+      background-color: var(--bg-input);
+      color: var(--text-primary);
+      border-color: var(--border-color);
+    }
+
+    :root[data-theme="light"] .btn-secondary,
+    :root[data-theme="light"] .btn-set-action,
+    :root[data-theme="light"] .ex-jump-pill,
+    :root[data-theme="light"] .cal-nav-btn,
+    :root[data-theme="light"] .quick-timer-btn,
+    :root[data-theme="light"] .btn-icon-mini {
+      background: #f1f5f9;
+      border-color: var(--border-color);
+      color: var(--text-primary);
+    }
+
+    :root[data-theme="light"] .exercise-block,
+    :root[data-theme="light"] .builder-row,
+    :root[data-theme="light"] .chart-inspector-card {
+      background: #f8fafc;
+      border-color: var(--border-color);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+    }
+
+    :root[data-theme="light"] .builder-field-mini,
+    :root[data-theme="light"] .ios-segmented,
+    :root[data-theme="light"] .inspector-level-box,
+    :root[data-theme="light"] .stopwatch-display-box {
+      background: #e9eef5;
+      border-color: var(--border-color);
+    }
+
+    :root[data-theme="light"] .set-line input,
+    :root[data-theme="light"] .ex-note-box input {
+      background: #ffffff;
+    }
+
+    :root[data-theme="light"] .set-check-btn {
+      background: #e9eef5;
+      border-color: var(--border-color);
+      color: #64748b;
+    }
+
+    :root[data-theme="light"] .ex-jump-pill.active,
+    :root[data-theme="light"] .ios-seg-btn.active,
+    :root[data-theme="light"] .day-cell.selected {
+      color: #0f172a;
+    }
+
+    :root[data-theme="light"] .day-cell {
+      background: #f8fafc;
+      border-color: var(--border-color);
+    }
+
+    :root[data-theme="light"] .day-cell.today {
+      background: #fffbeb;
+    }
+
+    :root[data-theme="light"] .inspector-metric-val {
+      color: var(--text-primary);
+    }
   </style>
 </head>
 <body>
@@ -2393,7 +2545,6 @@
               <span style="font-size:0.95rem; font-weight:800;">📝 Sessione</span>
               <div id="selected-date-display" class="selected-date-box"></div>
             </div>
-            <button type="button" class="btn-primary" style="width:auto; padding:7px 13px; font-size:0.76rem; border-radius:999px;" onclick="saveDailyLog()">💾 Salva</button>
           </div>
 
           <div id="today-banner-container"></div>
@@ -2406,17 +2557,13 @@
           </div>
 
           <select id="workout-select" onchange="onWorkoutSelectChange()" style="margin-bottom:10px;">
-            <option value="">-- Seleziona Scheda Allenamento --</option>
+            <option value="">Seleziona Scheda</option>
           </select>
 
           <div id="exercise-filter-bar" class="ex-Filter-bar" style="display:none;"></div>
 
           <div id="exercise-logs-container"></div>
 
-          <div id="session-notes-wrapper" style="display:none; margin-top: 4px; margin-bottom: 12px;">
-            <label>📓 Note Sessione Giornaliera</label>
-            <textarea id="session-notes-input" placeholder="Sensazioni, energia, peso corporeo, eventuali note..." oninput="debouncedAutoSave()"></textarea>
-          </div>
 
           <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:8px; margin-top:4px;">
             <button class="btn-primary" onclick="saveDailyLog()">💾 Salva Sessione</button>
@@ -2431,7 +2578,6 @@
           <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
             <div style="text-align:left;">
               <div style="font-size:0.96rem; font-weight:800; color:var(--text-primary);">📋 Le Tue Schede</div>
-              <div style="font-size:0.72rem; color:var(--text-secondary);">Seleziona, modifica o crea una scheda</div>
             </div>
             <button type="button" id="toggle-builder-btn" class="btn-primary" style="width:auto; padding:9px 14px; font-size:0.8rem; border-radius:999px;" onclick="toggleWorkoutBuilderDrawer()">➕ Nuova Scheda</button>
           </div>
@@ -2444,15 +2590,12 @@
               <label>Nome Allenamento</label>
               <input type="text" id="new-workout-name" placeholder="Inserisci nome scheda">
 
-              <label style="margin-top:4px;">Costruttore Esercizi (Serie & Recupero)</label>
+              <label style="margin-top:4px;">Costruttore Esercizi</label>
               <div id="workout-builder-list"></div>
 
               <button type="button" class="btn-secondary" style="margin-bottom: 12px;" onclick="addBuilderExerciseRow()">➕ Aggiungi Esercizio</button>
 
-              <div style="display:flex; gap:8px;">
-                <button class="btn-primary" id="save-workout-btn" onclick="addWorkoutScheme()">💾 Salva Scheda</button>
-                <button class="btn-secondary" id="cancel-edit-btn" style="width:auto; padding:12px 16px;" onclick="cancelEditWorkout()">✕ Chiudi</button>
-              </div>
+              <button class="btn-primary" id="save-workout-btn" onclick="addWorkoutScheme()">💾 Salva Scheda</button>
             </div>
           </div>
         </div>
@@ -2703,6 +2846,11 @@
 
         <div class="card">
           <div class="card-title">🎨 Aspetto & Schermo</div>
+          <label for="set-theme">Tema</label>
+          <select id="set-theme" onchange="setSetting('theme', this.value)" style="margin-bottom:12px;">
+            <option value="dark">Scuro</option>
+            <option value="light">Chiaro</option>
+          </select>
           <label>Colore Accento</label>
           <div class="swatches" id="set-swatches"></div>
           <div class="set-row" style="margin-top: 10px; margin-bottom:0;">
@@ -2788,7 +2936,7 @@
         'workout-select', 'exercise-filter-bar', 'exercise-logs-container',
         'session-notes-wrapper', 'session-notes-input', 'workout-builder-drawer',
         'toggle-builder-btn', 'workout-form-title', 'new-workout-name',
-        'workout-builder-list', 'save-workout-btn', 'cancel-edit-btn',
+        'workout-builder-list', 'save-workout-btn',
         'workout-schemes-list', 'backup-status-banner', 'custom-period-drawer',
         'custom-dates-toggle-btn', 'start-month', 'start-year', 'end-month',
         'end-year', 'progress-workout-filter', 'progress-exercise-filter',
@@ -2799,7 +2947,7 @@
         'rest-status-badge', 'rest-progress-circle', 'rest-display',
         'rest-subtext', 'rest-start-btn', 'floating-rest-bar',
         'floating-progress-line', 'floating-rest-display', 'set-ringtone',
-        'set-volume', 'set-bgmode', 'set-swatches', 'storage-persist-badge',
+        'set-volume', 'set-bgmode', 'set-theme', 'set-swatches', 'storage-persist-badge',
         'glass-confirm-modal', 'glass-confirm-card', 'glass-modal-icon',
         'glass-modal-title', 'glass-modal-text', 'glass-modal-cancel',
         'glass-modal-ok', 'plate-calc-modal', 'plate-calc-card',
@@ -3232,7 +3380,8 @@
       bgMode: 'mix',
       keepAwake: true,
       autoRest: true,
-      accent: 'sky'
+      accent: 'sky',
+      theme: 'dark'
     };
     let settings = Object.assign({}, DEFAULT_SETTINGS, safeJsonParse('gym_settings', {}));
     if (settings.bgMode === 'on') {
@@ -3258,6 +3407,7 @@
     function saveSettings() { localStorage.setItem('gym_settings', JSON.stringify(settings)); }
     function setSetting(k, v) {
       settings[k] = v; saveSettings();
+      if (k === 'theme') applyTheme();
       if (k === 'bgMode') {
         if (v === 'off') {
           stopBgAlarm();
@@ -3295,6 +3445,9 @@
     function applyTheme() {
       const a = ACCENTS[settings.accent] || ACCENTS.sky, s = document.documentElement.style;
       s.setProperty('--accent-primary', a[0]); s.setProperty('--accent-dark', a[1]); s.setProperty('--accent-rgb', a[2]);
+      document.documentElement.dataset.theme = settings.theme === 'light' ? 'light' : 'dark';
+      const themeColor = document.querySelector('meta[name="theme-color"]');
+      if (themeColor) themeColor.content = settings.theme === 'light' ? '#eef2f7' : '#151924';
       if (typeof renderCustomProgressChart === 'function' && currentChartPoints && currentChartPoints.length > 0) {
         renderCustomProgressChart();
       }
@@ -3306,6 +3459,7 @@
       sel.value = settings.ringtone;
       DOM['set-volume'].value = settings.volume;
       DOM['set-bgmode'].value = settings.bgMode === 'off' ? 'off' : 'mix';
+      DOM['set-theme'].value = settings.theme === 'light' ? 'light' : 'dark';
       ['vibrate', 'notify', 'keepAwake', 'autoRest'].forEach(k => {
         const b = document.getElementById('tgl-' + k);
         if (b) b.classList.toggle('on', !!settings[k]);
@@ -3632,10 +3786,7 @@
                 if (inp) inp.focus();
               }
             }
-          } else if (act === 'plate-calc') {
-            const wInput = document.getElementById(`weight-${exIdx}-0`);
-            const val = wInput && wInput.value ? parseFloat(wInput.value) : 60;
-            openPlateCalculator(val);
+
           } else if (act === 'cycle-tag') {
             cycleSetTag(exIdx, sIdx);
           } else if (act === 'toggle-check') {
@@ -4438,7 +4589,7 @@
       if (!selectLog || !selectFilter) return;
 
       const logOpts = ['<option value="">-- Seleziona Scheda --</option>'];
-      const filterOpts = ['<option value="ALL">TUTTI GLI ALLENAMENTI</option>'];
+      const filterOpts = ['<option value="ALL">Tutti gli Allenamenti</option>'];
 
       for (let i = 0; i < workouts.length; i++) {
         const w = workouts[i];
@@ -4586,9 +4737,7 @@
             <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
               <span style="color:var(--accent-primary); font-size: 1rem; font-weight:800;">${escapeHtml(w.name)}</span>
               <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
-                <button class="btn-primary" style="width:auto; padding:7px 11px; margin:0; font-size:0.76rem; border-radius:10px;" onclick="useWorkoutToday('${safeId}')">▶️ Usa</button>
                 <button class="btn-secondary" style="width:auto; padding:7px 11px; margin:0; font-size:0.76rem; border-radius:10px;" onclick="editWorkoutScheme('${safeId}')">✏️</button>
-                <button class="btn-secondary" style="width:auto; padding:7px 11px; margin:0; font-size:0.76rem; border-radius:10px;" onclick="duplicateWorkoutScheme('${safeId}')">📋</button>
                 <button class="btn-danger" style="width:auto; padding:7px 11px; margin:0; font-size:0.76rem; border-radius:10px;" onclick="deleteWorkoutScheme('${safeId}')">🗑️</button>
               </div>
             </div>
@@ -4629,7 +4778,6 @@
       renderBuilderRows();
       DOM['workout-form-title'].textContent = '✏️ Modifica Scheda';
       DOM['save-workout-btn'].textContent = '💾 Salva Modifiche';
-      DOM['cancel-edit-btn'].style.display = 'flex';
       openWorkoutBuilderDrawer();
       const tabWorkouts = document.getElementById('tab-workouts');
       if (tabWorkouts) tabWorkouts.scrollTo({ top: 0, behavior: 'smooth' });
@@ -4641,7 +4789,6 @@
       initWorkoutBuilderDefault();
       DOM['workout-form-title'].textContent = '➕ Costruttore Scheda';
       DOM['save-workout-btn'].textContent = '💾 Salva Scheda';
-      DOM['cancel-edit-btn'].style.display = 'none';
       closeWorkoutBuilderDrawer();
     }
 
@@ -4975,7 +5122,7 @@
             const tagPrefix = (s.type && s.type !== 'N') ? `[${s.type}]` : `S${idx + 1}`;
             return `${tagPrefix}: ${s.weight}kg×${s.reps}`;
           }).join(' • ');
-          const rmBadge = best1RM > 0 ? ` <span style="color:#fde047;">(1RM ~${best1RM}kg)</span>` : '';
+          const rmBadge = best1RM > 0 ? '' : '';
           prevBadgeHtml = `
             <div class="prev-stats-badge">
               <span>⏮️ <strong>${formatDisplayDate(lastPerf.date)}:</strong> ${setsStr}${rmBadge}</span>
@@ -5008,8 +5155,6 @@
                 <button type="button" class="btn-set-action" data-ex-action="add-set" data-ex-idx="${exIdx}">➕</button>
                 <button type="button" class="btn-set-action" data-ex-action="rem-set" data-ex-idx="${exIdx}">➖</button>
                 <button type="button" class="btn-set-action" data-ex-action="toggle-note" data-ex-idx="${exIdx}">📝</button>
-                <button type="button" class="btn-set-action" data-ex-action="plate-calc" data-ex-idx="${exIdx}">🏋️</button>
-                <button type="button" class="btn-set-action ex-collapse-toggle" data-ex-action="toggle-collapse" data-ex-idx="${exIdx}" aria-label="Comprimi">▾</button>
               </div>
             </div>
             <div class="exercise-body-collapsible">
@@ -5403,7 +5548,7 @@
       workouts.forEach(w => w.exercises.forEach(e => names.add(e.name)));
       Object.values(logs).forEach(log => log.data.forEach(d => names.add(d.exercise)));
 
-      const opts = ['<option value="ALL">VOLUME TOTALE (tutti gli esercizi)</option>'];
+      const opts = ['<option value="ALL">Volume Totale</option>'];
       Array.from(names).sort((a, b) => a.localeCompare(b)).forEach(name => {
         const safe = escapeHtml(name);
         opts.push(`<option value="${safe}">${safe}</option>`);
