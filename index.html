@@ -1293,6 +1293,17 @@
       background: rgba(255, 255, 255, 0.045);
     }
 
+    .exercise-plan-note {
+      font-size: 0.76rem;
+      color: var(--text-secondary);
+      background: rgba(var(--accent-rgb), 0.08);
+      border: 1px solid rgba(var(--accent-rgb), 0.2);
+      border-radius: 10px;
+      padding: 8px 10px;
+      margin-bottom: 8px;
+      white-space: pre-wrap;
+    }
+
     .prev-note-reminder {
       font-size: 0.72rem;
       color: #fde047;
@@ -1337,6 +1348,13 @@
       text-align-last: left;
       padding: 9px 12px;
       font-size: 0.9rem;
+    }
+
+    .b-ex-note {
+      min-height: 56px;
+      margin: 0;
+      font-size: 0.8rem;
+      text-align: left;
     }
 
     .builder-row-bottom {
@@ -1648,6 +1666,11 @@
       border-color: var(--accent-primary);
       background: rgba(var(--accent-rgb), 0.18);
       transform: scale(0.94);
+    }
+
+    .btn-set-action[data-ex-action="add-set"],
+    .btn-set-action[data-ex-action="rem-set"] {
+      color: #fff;
     }
 
     .prev-stats-badge {
@@ -2171,24 +2194,33 @@
 
     /* Exercise Chips in Schede tab */
     .exercise-chips-wrap {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
       gap: 6px;
       margin-top: 8px;
     }
 
     .workout-chip {
-      display: inline-flex;
+      display: flex;
       align-items: center;
+      justify-content: space-between;
+      min-width: 0;
+      min-height: 44px;
       gap: 5px;
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.12);
       border-top-color: rgba(255, 255, 255, 0.24);
-      padding: 4px 10px;
-      border-radius: 999px;
+      padding: 7px 9px;
+      border-radius: 12px;
       font-size: 0.75rem;
       font-weight: 600;
       color: var(--text-primary);
+    }
+
+    .workout-chip > span:first-child {
+      min-width: 0;
+      overflow-wrap: anywhere;
+      flex: 1;
     }
 
     .chip-sets {
@@ -2198,6 +2230,8 @@
       font-weight: 800;
       padding: 2px 6px;
       border-radius: 10px;
+      flex-shrink: 0;
+      white-space: nowrap;
     }
 
     /* Compact Horizontal Settings Rows */
@@ -2478,10 +2512,9 @@
         <div>
           <label>Bilanciere (Kg)</label>
           <select id="plate-bar-weight" onchange="updatePlateCalculator()" style="margin-bottom:0;">
-            <option value="20" selected>20 kg (Olimpico)</option>
-            <option value="15">15 kg (Donne)</option>
-            <option value="10">10 kg (EZ / Tecnico)</option>
-            <option value="0">0 kg (Solo Dischi)</option>
+            <option value="20" selected>20 kg</option>
+            <option value="15">15 kg</option>
+            <option value="10">10 kg</option>
           </select>
         </div>
       </div>
@@ -2501,7 +2534,7 @@
         <span class="header-brand-name">GYMLOG</span>
       </div>
       <div class="header-sep"></div>
-      <div id="header-title" class="header-title">📅 Calendario & Logbook</div>
+      <div id="header-title" class="header-title">📅 Logbook</div>
       <button type="button" id="header-sw-pill" class="header-sw-pill" onclick="switchTab('timer')" title="Vai al cronometro sessione">
         <span class="status-pulse-dot" style="background:#34d399; box-shadow:0 0 6px #34d399;"></span>
         <span id="header-sw-text">00:00</span>
@@ -2551,9 +2584,8 @@
           <div id="save-status-container"></div>
 
           <div style="display:flex; gap:6px; flex-wrap:wrap; justify-content:center; margin-bottom:9px;">
-            <button id="copy-last-btn" type="button" class="btn-set-action" style="display:none;" onclick="prefillFromLastWorkout()">⚡ Copia scorsa volta</button>
             <button type="button" class="btn-set-action" onclick="quickStartRestFromLog()">⏱️ Avvia Pausa</button>
-            <button type="button" class="btn-set-action" onclick="openPlateCalculator()">🏋️ Dischi</button>
+            <button type="button" class="btn-set-action" onclick="openPlateCalculator()">🏋️ Calcolatore Dischi</button>
           </div>
 
           <select id="workout-select" onchange="onWorkoutSelectChange()" style="margin-bottom:10px;">
@@ -2617,33 +2649,32 @@
       <section id="tab-progress" class="tab-content">
         <div class="card" style="padding: 13px 13px;">
           <div class="quick-range-bar">
-            <button type="button" class="range-pill" data-range="1" onclick="setQuickProgressRange(1)">1M</button>
-            <button type="button" class="range-pill active" data-range="3" onclick="setQuickProgressRange(3)">3M</button>
-            <button type="button" class="range-pill" data-range="6" onclick="setQuickProgressRange(6)">6M</button>
-            <button type="button" class="range-pill" data-range="12" onclick="setQuickProgressRange(12)">1A</button>
+            <button type="button" class="range-pill" data-range="1" onclick="setQuickProgressRange(1)">1 Mese</button>
+            <button type="button" class="range-pill active" data-range="3" onclick="setQuickProgressRange(3)">3 Mesi</button>
+            <button type="button" class="range-pill" data-range="6" onclick="setQuickProgressRange(6)">6 Mesi</button>
+            <button type="button" class="range-pill" data-range="12" onclick="setQuickProgressRange(12)">1 Anno</button>
             <button type="button" class="range-pill" data-range="0" onclick="setQuickProgressRange(0)">Tutto</button>
-            <button type="button" id="custom-dates-toggle-btn" class="range-pill" onclick="toggleCustomPeriodDrawer()" style="flex:1.2;">🗓️ Mesi</button>
           </div>
 
-          <div id="custom-period-drawer" class="smooth-collapse">
+          <div id="custom-period-drawer" class="smooth-collapse open">
             <div class="smooth-collapse-inner">
               <div class="period-picker-container">
                 <div class="period-group">
                   <label>Da Mese</label>
                   <div class="period-selects">
                     <select id="start-month" onchange="onManualPeriodChange()">
-                      <option value="01">Gen</option>
-                      <option value="02">Feb</option>
-                      <option value="03">Mar</option>
-                      <option value="04">Apr</option>
-                      <option value="05">Mag</option>
-                      <option value="06">Giu</option>
-                      <option value="07">Lug</option>
-                      <option value="08">Ago</option>
-                      <option value="09" selected>Set</option>
-                      <option value="10">Ott</option>
-                      <option value="11">Nov</option>
-                      <option value="12">Dic</option>
+                      <option value="01">Gennaio</option>
+                      <option value="02">Febbraio</option>
+                      <option value="03">Marzo</option>
+                      <option value="04">Aprile</option>
+                      <option value="05">Maggio</option>
+                      <option value="06">Giugno</option>
+                      <option value="07">Luglio</option>
+                      <option value="08">Agosto</option>
+                      <option value="09" selected>Settembre</option>
+                      <option value="10">Ottobre</option>
+                      <option value="11">Novembre</option>
+                      <option value="12">Dicembre</option>
                     </select>
                     <select id="start-year" onchange="onManualPeriodChange()">
                       <option value="2024">2024</option>
@@ -2658,18 +2689,18 @@
                   <label>A Mese</label>
                   <div class="period-selects">
                     <select id="end-month" onchange="onManualPeriodChange()">
-                      <option value="01">Gen</option>
-                      <option value="02">Feb</option>
-                      <option value="03">Mar</option>
-                      <option value="04">Apr</option>
-                      <option value="05">Mag</option>
-                      <option value="06">Giu</option>
-                      <option value="07">Lug</option>
-                      <option value="08">Ago</option>
-                      <option value="09" selected>Set</option>
-                      <option value="10">Ott</option>
-                      <option value="11">Nov</option>
-                      <option value="12">Dic</option>
+                      <option value="01">Gennaio</option>
+                      <option value="02">Febbraio</option>
+                      <option value="03">Marzo</option>
+                      <option value="04">Aprile</option>
+                      <option value="05">Maggio</option>
+                      <option value="06">Giugno</option>
+                      <option value="07">Luglio</option>
+                      <option value="08">Agosto</option>
+                      <option value="09" selected>Settembre</option>
+                      <option value="10">Ottobre</option>
+                      <option value="11">Novembre</option>
+                      <option value="12">Dicembre</option>
                     </select>
                     <select id="end-year" onchange="onManualPeriodChange()">
                       <option value="2024">2024</option>
@@ -2845,13 +2876,18 @@
         </div>
 
         <div class="card">
-          <div class="card-title">🎨 Aspetto & Schermo</div>
+          <div class="card-title">🎨 Personalizzazione</div>
           <label for="set-theme">Tema</label>
           <select id="set-theme" onchange="setSetting('theme', this.value)" style="margin-bottom:12px;">
             <option value="dark">Scuro</option>
             <option value="light">Chiaro</option>
           </select>
-          <label>Colore Accento</label>
+          <label for="set-weight-unit">Unità di peso</label>
+          <select id="set-weight-unit" onchange="changeWeightUnit(this.value)" style="margin-bottom:12px;">
+            <option value="kg">Chilogrammi (kg)</option>
+            <option value="lbs">Libbre (lbs)</option>
+          </select>
+          <label>Colore del Tema</label>
           <div class="swatches" id="set-swatches"></div>
           <div class="set-row" style="margin-top: 10px; margin-bottom:0;">
             <div>
@@ -2932,14 +2968,14 @@
         'app-toast-container', 'header-title', 'header-sw-pill', 'header-sw-text',
         'main-container', 'tabs-track', 'nav-glider',
         'current-month-display', 'calendar-body', 'today-banner-container',
-        'save-status-container', 'selected-date-display', 'copy-last-btn',
+        'save-status-container', 'selected-date-display',
         'workout-select', 'exercise-filter-bar', 'exercise-logs-container',
         'session-notes-wrapper', 'session-notes-input', 'workout-builder-drawer',
         'toggle-builder-btn', 'workout-form-title', 'new-workout-name',
         'workout-builder-list', 'save-workout-btn',
         'workout-schemes-list', 'backup-status-banner', 'custom-period-drawer',
-        'custom-dates-toggle-btn', 'start-month', 'start-year', 'end-month',
-        'end-year', 'progress-workout-filter', 'progress-exercise-filter',
+        'start-month', 'start-year', 'end-month', 'end-year',
+        'progress-workout-filter', 'progress-exercise-filter',
         'exercise-metric-segmented', 'progress-stat-label', 'progress-percentage',
         'progress-sessions-count', 'progress-streak-val', 'progressChart',
         'chart-subtitle-pill', 'chart-point-inspector', 'stopwatch-status-badge',
@@ -2947,7 +2983,7 @@
         'rest-status-badge', 'rest-progress-circle', 'rest-display',
         'rest-subtext', 'rest-start-btn', 'floating-rest-bar',
         'floating-progress-line', 'floating-rest-display', 'set-ringtone',
-        'set-volume', 'set-bgmode', 'set-theme', 'set-swatches', 'storage-persist-badge',
+        'set-volume', 'set-bgmode', 'set-theme', 'set-weight-unit', 'set-swatches', 'storage-persist-badge',
         'glass-confirm-modal', 'glass-confirm-card', 'glass-modal-icon',
         'glass-modal-title', 'glass-modal-text', 'glass-modal-cancel',
         'glass-modal-ok', 'plate-calc-modal', 'plate-calc-card',
@@ -2989,7 +3025,7 @@
           if (badge) {
             badge.innerHTML = granted
               ? '🛡️ <strong>Dati Protetti:</strong> I tuoi allenamenti sono salvati in modo sicuro sul telefono.'
-              : 'ℹ️ Aggiungi l\'app alla schermata Home per proteggere i dati a lungo termine.';
+              : '';
           }
         } catch (e) {}
       }
@@ -3191,9 +3227,7 @@
     // Calcolatore Dischi Bilanciere (Plate Calculator)
     // ═══════════════════════════════════════════════════════════
     const PLATES_DEF = [
-      { w: 25,   color: '#ef4444', h: 86, width: 20 },
       { w: 20,   color: '#3b82f6', h: 82, width: 19 },
-      { w: 15,   color: '#eab308', h: 74, width: 17 },
       { w: 10,   color: '#22c55e', h: 66, width: 16 },
       { w: 5,    color: '#f8fafc', h: 56, width: 14, textColor: '#0f172a' },
       { w: 2.5,  color: '#a855f7', h: 48, width: 13 },
@@ -3292,12 +3326,13 @@
         id: String(w.id),
         name: w.name || 'SCHEDA',
         exercises: (w.exercises || []).map(e => {
-          if (typeof e === 'string') return { name: e, sets: 3, rest: 90 };
+            if (typeof e === 'string') return { name: e, sets: 3, rest: 90, note: '' };
           return {
             name: e.name || 'Esercizio',
             sets: parseInt(e.sets, 10) || 3,
-            rest: parseInt(e.rest, 10) || 90
-          };
+              rest: parseInt(e.rest, 10) || 90,
+              note: typeof e.note === 'string' ? e.note : ''
+            };
         })
       }));
     }
@@ -3381,9 +3416,11 @@
       keepAwake: true,
       autoRest: true,
       accent: 'sky',
-      theme: 'dark'
+      theme: 'dark',
+      weightUnit: 'kg'
     };
     let settings = Object.assign({}, DEFAULT_SETTINGS, safeJsonParse('gym_settings', {}));
+    if (!['kg', 'lbs'].includes(settings.weightUnit)) settings.weightUnit = 'kg';
     if (settings.bgMode === 'on') {
       settings.bgMode = 'mix';
       localStorage.setItem('gym_settings', JSON.stringify(settings));
@@ -3405,6 +3442,21 @@
     };
 
     function saveSettings() { localStorage.setItem('gym_settings', JSON.stringify(settings)); }
+    function weightUnit() { return settings.weightUnit === 'lbs' ? 'lbs' : 'kg'; }
+    function weightFromKg(value) { return weightUnit() === 'lbs' ? value * 2.2046226218 : value; }
+    function weightToKg(value) { return weightUnit() === 'lbs' ? value / 2.2046226218 : value; }
+    function formatWeight(value, decimals = 1) {
+      const converted = weightFromKg(Number(value) || 0);
+      const rounded = Math.round(converted * (10 ** decimals)) / (10 ** decimals);
+      return `${rounded} ${weightUnit()}`;
+    }
+    function changeWeightUnit(unit) {
+      if (!['kg', 'lbs'].includes(unit) || unit === weightUnit()) return;
+      if (autoSaveTimeout || formDirty) autoSaveCurrentForm(true);
+      setSetting('weightUnit', unit);
+      loadSavedLogForDate();
+      updateProgressChart();
+    }
     function setSetting(k, v) {
       settings[k] = v; saveSettings();
       if (k === 'theme') applyTheme();
@@ -3435,10 +3487,13 @@
         danger: false
       });
       if (!ok) return;
+      if (autoSaveTimeout || formDirty) autoSaveCurrentForm(true);
       settings = Object.assign({}, DEFAULT_SETTINGS);
       saveSettings();
       applyTheme();
       renderSettingsUI();
+      loadSavedLogForDate();
+      updateProgressChart();
       showToast('Impostazioni predefinite ripristinate', 'success');
     }
 
@@ -3460,6 +3515,7 @@
       DOM['set-volume'].value = settings.volume;
       DOM['set-bgmode'].value = settings.bgMode === 'off' ? 'off' : 'mix';
       DOM['set-theme'].value = settings.theme === 'light' ? 'light' : 'dark';
+      DOM['set-weight-unit'].value = weightUnit();
       ['vibrate', 'notify', 'keepAwake', 'autoRest'].forEach(k => {
         const b = document.getElementById('tgl-' + k);
         if (b) b.classList.toggle('on', !!settings[k]);
@@ -3783,7 +3839,9 @@
               noteBox.classList.toggle('open');
               if (noteBox.classList.contains('open')) {
                 const inp = document.getElementById(`ex-note-${exIdx}`);
-                if (inp) inp.focus();
+                const workout = workouts.find(w => w.id === formCtx.wid);
+                const planNote = workout && workout.exercises[exIdx] ? workout.exercises[exIdx].note : '';
+                if (inp && !planNote) inp.focus();
               }
             }
 
@@ -3916,11 +3974,11 @@
       });
 
       const titles = {
-        'log': '📅 Calendario & Logbook',
-        'workouts': '📋 Schede di Allenamento',
-        'progress': '📈 Analisi & Progressi',
-        'timer': '⏱️ Cronometro & Recupero',
-        'settings': '⚙️ Impostazioni & Tema'
+        'log': '📅 Logbook',
+        'workouts': '📋 Schede',
+        'progress': '📈 Progressi',
+        'timer': '⏱️ Cronometro',
+        'settings': '⚙️ Impostazioni'
       };
       const headerEl = DOM['header-title'] || document.getElementById('header-title');
       if (headerEl && headerEl.textContent !== titles[tabId]) {
@@ -4635,8 +4693,8 @@
 
     function initWorkoutBuilderDefault() {
       builderExercises = [
-        { name: '', sets: 3, rest: 90 },
-        { name: '', sets: 3, rest: 90 }
+        { name: '', sets: 3, rest: 90, note: '' },
+        { name: '', sets: 3, rest: 90, note: '' }
       ];
       renderBuilderRows();
     }
@@ -4648,9 +4706,11 @@
         const nameInp = row.querySelector('.b-ex-name');
         const setsInp = row.querySelector('.b-ex-sets');
         const restSel = row.querySelector('.b-ex-rest');
+        const noteInp = row.querySelector('.b-ex-note');
         if (nameInp) builderExercises[idx].name = nameInp.value;
         if (setsInp) builderExercises[idx].sets = parseInt(setsInp.value, 10) || 3;
         if (restSel) builderExercises[idx].rest = parseInt(restSel.value, 10) || 90;
+        if (noteInp) builderExercises[idx].note = noteInp.value;
       });
     }
 
@@ -4682,6 +4742,7 @@
                 <button type="button" class="btn-icon-mini del" onclick="removeBuilderExerciseRow(${idx})" aria-label="Rimuovi">✕</button>
               </div>
             </div>
+            <textarea class="b-ex-note" rows="2" placeholder="Note per questo esercizio...">${escapeHtml(ex.note || '')}</textarea>
           </div>
         `;
       }).join('');
@@ -4689,14 +4750,14 @@
 
     function addBuilderExerciseRow() {
       syncBuilderStateFromDOM();
-      builderExercises.push({ name: '', sets: 3, rest: 90 });
+      builderExercises.push({ name: '', sets: 3, rest: 90, note: '' });
       renderBuilderRows();
     }
 
     function removeBuilderExerciseRow(idx) {
       syncBuilderStateFromDOM();
       if (builderExercises.length <= 1) {
-        builderExercises[0] = { name: '', sets: 3, rest: 90 };
+        builderExercises[0] = { name: '', sets: 3, rest: 90, note: '' };
       } else {
         builderExercises.splice(idx, 1);
       }
@@ -4729,7 +4790,7 @@
       for (let i = 0; i < workouts.length; i++) {
         const w = workouts[i];
         const chipsHtml = w.exercises.map(e =>
-          `<span class="workout-chip">${escapeHtml(e.name)} <span class="chip-sets">${e.sets}× • ${e.rest || 90}s</span></span>`
+          `<span class="workout-chip"><span>${escapeHtml(e.name)}</span><span class="chip-sets">${e.sets}× • ${e.rest || 90}s</span></span>`
         ).join('');
         const safeId = escapeHtml(w.id);
         htmlParts.push(`
@@ -4737,8 +4798,8 @@
             <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
               <span style="color:var(--accent-primary); font-size: 1rem; font-weight:800;">${escapeHtml(w.name)}</span>
               <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
-                <button class="btn-secondary" style="width:auto; padding:7px 11px; margin:0; font-size:0.76rem; border-radius:10px;" onclick="editWorkoutScheme('${safeId}')">✏️</button>
-                <button class="btn-danger" style="width:auto; padding:7px 11px; margin:0; font-size:0.76rem; border-radius:10px;" onclick="deleteWorkoutScheme('${safeId}')">🗑️</button>
+                <button class="btn-secondary" style="width:auto; padding:7px 11px; margin:0; font-size:0.76rem; border-radius:10px;" onclick="editWorkoutScheme('${safeId}')">✏️ Modifica</button>
+                <button class="btn-danger" style="width:auto; padding:7px 11px; margin:0; font-size:0.76rem; border-radius:10px;" onclick="deleteWorkoutScheme('${safeId}')">🗑️ Elimina</button>
               </div>
             </div>
             <div class="exercise-chips-wrap" style="justify-content:flex-start; margin-top:10px;">${chipsHtml}</div>
@@ -4754,7 +4815,7 @@
       const copy = {
         id: Date.now().toString(),
         name: `${w.name} (Copia)`,
-        exercises: w.exercises.map(e => ({ name: e.name, sets: e.sets || 3, rest: e.rest || 90 }))
+        exercises: w.exercises.map(e => ({ name: e.name, sets: e.sets || 3, rest: e.rest || 90, note: e.note || '' }))
       };
       workouts.push(copy);
       localStorage.setItem('gym_workouts', JSON.stringify(workouts));
@@ -4773,7 +4834,8 @@
       builderExercises = w.exercises.map(e => ({
         name: e.name,
         sets: e.sets || 3,
-        rest: e.rest || 90
+        rest: e.rest || 90,
+        note: e.note || ''
       }));
       renderBuilderRows();
       DOM['workout-form-title'].textContent = '✏️ Modifica Scheda';
@@ -4801,7 +4863,8 @@
         .map(e => ({
           name: (e.name || '').trim(),
           sets: Math.max(1, Math.min(15, parseInt(e.sets, 10) || 3)),
-          rest: parseInt(e.rest, 10) || 90
+          rest: parseInt(e.rest, 10) || 90,
+          note: (e.note || '').trim()
         }))
         .filter(e => e.name.length > 0);
 
@@ -4905,7 +4968,7 @@
       const metaEl = document.getElementById(`set-meta-${exIdx}-${sIdx}`);
       if (!metaEl) return;
 
-      const w = wEl ? parseFloat(wEl.value) : 0;
+      const w = wEl ? weightToKg(parseFloat(wEl.value) || 0) : 0;
       const r = rEl ? parseInt(rEl.value, 10) : 0;
       const tag = numBtn ? (numBtn.getAttribute('data-set-type') || 'N') : 'N';
 
@@ -4917,7 +4980,7 @@
       const est = calcEpley1RM(w, r);
       if (est > 0) {
         const vol = Math.round(w * r);
-        metaEl.innerHTML = `<span>Vol: ${vol} kg</span><span class="set-1rm-pill">1RM Stimato: ~${est} kg</span>`;
+        metaEl.innerHTML = `<span>Vol: ${formatWeight(vol, 1)}</span><span class="set-1rm-pill">1RM Stimato: ~${formatWeight(est, 1)}</span>`;
       } else {
         metaEl.innerHTML = '';
       }
@@ -4965,7 +5028,7 @@
       lastPerf.sets.forEach((s, sIdx) => {
         const wInput = document.getElementById(`weight-${exIdx}-${sIdx}`);
         const rInput = document.getElementById(`reps-${exIdx}-${sIdx}`);
-        if (wInput && s.weight) wInput.value = s.weight;
+        if (wInput && s.weight) wInput.value = Math.round(weightFromKg(s.weight) * 100) / 100;
         if (rInput && s.reps) rInput.value = s.reps;
         updateLive1RMForSet(exIdx, sIdx);
       });
@@ -4986,21 +5049,22 @@
     }
 
     function buildSingleSetRowHtml(exIdx, sIdx, existingSet, prevSet) {
-      const wVal = (existingSet && existingSet.weight > 0) ? existingSet.weight : '';
+      const wVal = (existingSet && existingSet.weight > 0) ? Math.round(weightFromKg(existingSet.weight) * 100) / 100 : '';
       const rVal = (existingSet && existingSet.reps > 0) ? existingSet.reps : '';
       const isCompleted = !!(existingSet && existingSet.completed);
       const setType = (existingSet && ['N', 'W', 'D', 'F'].includes(existingSet.type)) ? existingSet.type : 'N';
 
-      const wPlaceholder = prevSet ? `${prevSet.weight} kg` : 'Kg';
+      const wPlaceholder = prevSet ? formatWeight(prevSet.weight) : weightUnit();
       const rPlaceholder = prevSet ? `${prevSet.reps} reps` : 'Reps';
 
-      const est1RM = (setType !== 'W' && wVal && rVal) ? calcEpley1RM(wVal, rVal) : 0;
-      const vol = (setType !== 'W' && wVal && rVal) ? Math.round(parseFloat(wVal) * parseInt(rVal, 10)) : 0;
+      const weightKg = wVal ? weightToKg(parseFloat(wVal)) : 0;
+      const est1RM = (setType !== 'W' && weightKg && rVal) ? calcEpley1RM(weightKg, rVal) : 0;
+      const vol = (setType !== 'W' && weightKg && rVal) ? Math.round(weightKg * parseInt(rVal, 10)) : 0;
       let metaHtml = '';
       if (setType === 'W') {
         metaHtml = `<span style="color:#fbbf24;">Serie di Riscaldamento (esclusa dal volume)</span>`;
       } else if (est1RM > 0) {
-        metaHtml = `<span>Vol: ${vol} kg</span><span class="set-1rm-pill">1RM Stimato: ~${est1RM} kg</span>`;
+        metaHtml = `<span>Vol: ${formatWeight(vol, 1)}</span><span class="set-1rm-pill">1RM Stimato: ~${formatWeight(est1RM, 1)}</span>`;
       }
 
       return `
@@ -5100,8 +5164,6 @@
         DOM['session-notes-input'].value = (existingLog && existingLog.notes) ? existingLog.notes : '';
       }
 
-      const copyBtn = DOM['copy-last-btn'];
-      let hasAnyPreviousData = false;
       const blocksHtml = [];
 
       workout.exercises.forEach((ex, exIdx) => {
@@ -5111,8 +5173,6 @@
         const existingNote = (existingItem && existingItem.note) ? existingItem.note : '';
 
         const lastPerf = getLastPerformanceForExercise(ex.name, selectedDateStr);
-        if (lastPerf) hasAnyPreviousData = true;
-
         let prevBadgeHtml = '';
         if (lastPerf && lastPerf.sets && lastPerf.sets.length > 0) {
           let best1RM = 0;
@@ -5120,7 +5180,7 @@
             const e1 = s.type !== 'W' ? calcEpley1RM(s.weight, s.reps) : 0;
             if (e1 > best1RM) best1RM = e1;
             const tagPrefix = (s.type && s.type !== 'N') ? `[${s.type}]` : `S${idx + 1}`;
-            return `${tagPrefix}: ${s.weight}kg×${s.reps}`;
+            return `${tagPrefix}: ${formatWeight(s.weight)}×${s.reps}`;
           }).join(' • ');
           const rmBadge = best1RM > 0 ? '' : '';
           prevBadgeHtml = `
@@ -5152,9 +5212,9 @@
                 <span class="chip-sets">⏱️ ${exRest}s</span>
               </button>
               <div style="display:flex; gap:5px; flex-wrap:wrap; justify-content:flex-end;">
-                <button type="button" class="btn-set-action" data-ex-action="add-set" data-ex-idx="${exIdx}">➕</button>
-                <button type="button" class="btn-set-action" data-ex-action="rem-set" data-ex-idx="${exIdx}">➖</button>
-                <button type="button" class="btn-set-action" data-ex-action="toggle-note" data-ex-idx="${exIdx}">📝</button>
+                <button type="button" class="btn-set-action" data-ex-action="add-set" data-ex-idx="${exIdx}">+ Serie</button>
+                <button type="button" class="btn-set-action" data-ex-action="rem-set" data-ex-idx="${exIdx}">− Serie</button>
+                <button type="button" class="btn-set-action" data-ex-action="toggle-note" data-ex-idx="${exIdx}">Note</button>
               </div>
             </div>
             <div class="exercise-body-collapsible">
@@ -5162,13 +5222,14 @@
                 ${prevNoteHtml}
                 <div class="ex-note-box${existingNote ? ' open' : ''}" id="ex-note-box-${exIdx}">
                   <div class="ex-note-box-inner">
+                    ${ex.note ? `<div class="exercise-plan-note"><strong>Nota scheda:</strong> ${escapeHtml(ex.note)}</div>` : ''}
                     <input type="text" id="ex-note-${exIdx}" value="${escapeHtml(existingNote)}" placeholder="Nota esercizio...">
                   </div>
                 </div>
                 ${prevBadgeHtml}
                 <div class="set-line-header">
                   <span>SET</span>
-                  <span>PESO (KG)</span>
+                  <span>PESO (${weightUnit().toUpperCase()})</span>
                   <span>REPS</span>
                   <span>✓</span>
                 </div>
@@ -5183,9 +5244,6 @@
 
       container.innerHTML = blocksHtml.join('');
 
-      if (copyBtn) {
-        copyBtn.style.display = hasAnyPreviousData ? 'inline-flex' : 'none';
-      }
     }
 
     async function onWorkoutSelectChange() {
@@ -5218,7 +5276,6 @@
         localStorage.setItem('gym_drafts', JSON.stringify(drafts));
         renderCalendar();
         updateSaveStatus();
-        if (DOM['copy-last-btn']) DOM['copy-last-btn'].style.display = 'none';
         return;
       }
 
@@ -5258,7 +5315,7 @@
           const chkEl = document.getElementById(`set-check-${exIdx}-${s}`);
           const numEl = document.getElementById(`set-num-${exIdx}-${s}`);
 
-          const kg = (wEl && wEl.value !== '') ? parseFloat(wEl.value) : 0;
+          const kg = (wEl && wEl.value !== '') ? weightToKg(parseFloat(wEl.value) || 0) : 0;
           const reps = (rEl && rEl.value !== '') ? parseInt(rEl.value, 10) : 0;
           const completed = !!(chkEl && chkEl.getAttribute('data-completed') === '1');
           const type = numEl ? (numEl.getAttribute('data-set-type') || 'N') : 'N';
@@ -5336,11 +5393,7 @@
             </div>
           `;
         } else {
-          container.innerHTML = `
-            <div class="save-status-bar draft">
-              <span>⚡ <strong>Bozza Salvata in Automatico</strong></span>
-            </div>
-          `;
+          container.innerHTML = '';
         }
       } else {
         container.innerHTML = '';
@@ -5413,7 +5466,7 @@
         if (maxWeightThisExercise > 0) {
           const prevMax = getMaxWeightForExercise(item.exercise, selectedDateStr);
           if (maxWeightThisExercise > prevMax) {
-            newPRs.push(`${escapeHtml(item.exercise)}: ${maxWeightThisExercise}kg`);
+            newPRs.push(`${escapeHtml(item.exercise)}: ${formatWeight(maxWeightThisExercise)}`);
           }
         }
       });
@@ -5491,7 +5544,7 @@
           DOM['exercise-filter-bar'].innerHTML = '';
         }
         if (DOM['session-notes-wrapper']) DOM['session-notes-wrapper'].style.display = 'none';
-        if (DOM['copy-last-btn']) DOM['copy-last-btn'].style.display = 'none';
+
       }
 
       updateSaveStatus();
@@ -5522,14 +5575,6 @@
         DOM['start-year'].value = String(sy);
       }
       updateProgressChart();
-    }
-
-    function toggleCustomPeriodDrawer() {
-      const drawer = DOM['custom-period-drawer'];
-      const btn = DOM['custom-dates-toggle-btn'];
-      if (!drawer) return;
-      const isOpen = drawer.classList.toggle('open');
-      if (btn) btn.classList.toggle('active', isOpen);
     }
 
     function onManualPeriodChange() {
@@ -5609,20 +5654,22 @@
     }
 
     function formatAxisValue(val) {
-      if (val >= 10000) return (val / 1000).toFixed(0) + 'k kg';
+      val = weightFromKg(val);
+      if (val >= 10000) return (val / 1000).toFixed(0) + `k ${weightUnit()}`;
       if (val >= 1000) {
         const k = val / 1000;
-        return (k % 1 === 0 ? k.toFixed(0) : k.toFixed(1)) + 'k kg';
+        return (k % 1 === 0 ? k.toFixed(0) : k.toFixed(1)) + `k ${weightUnit()}`;
       }
-      return Math.round(val) + ' kg';
+      return Math.round(val) + ` ${weightUnit()}`;
     }
 
     function formatMetricExact(val) {
+      val = weightFromKg(val);
       if (val >= 1000) {
-        return Math.round(val).toLocaleString('it-IT') + ' kg';
+        return Math.round(val).toLocaleString('it-IT') + ` ${weightUnit()}`;
       }
       const rounded = Math.round(val * 10) / 10;
-      return rounded + ' kg';
+      return rounded + ` ${weightUnit()}`;
     }
 
     function updateProgressChart() {
@@ -5647,7 +5694,7 @@
       });
 
       let statLabel = 'Variazione';
-      let subtitleText = 'Volume Totale (kg)';
+      let subtitleText = `Volume Totale (${weightUnit()})`;
       const points = [];
 
       if (exerciseFilter !== 'ALL') {
@@ -5672,10 +5719,10 @@
             const rm = calcEpley1RM(s.weight, s.reps);
             if (s.weight > maxW || (s.weight === maxW && rm > best1RM)) {
               maxW = s.weight;
-              bestSetStr = `${s.weight} kg × ${s.reps} reps`;
+              bestSetStr = `${formatWeight(s.weight)} × ${s.reps} reps`;
             }
             if (rm > best1RM) best1RM = rm;
-            setsSummary.push(`${s.weight}×${s.reps}`);
+            setsSummary.push(`${formatWeight(s.weight)}×${s.reps}`);
           }));
 
           const val = currentProgressMetric === 'est1RM' ? best1RM : (currentProgressMetric === 'volume' ? exVol : maxW);
@@ -5698,7 +5745,7 @@
         });
       } else {
         statLabel = 'Var. Carico';
-        subtitleText = 'Volume Allenante Totale (kg)';
+        subtitleText = `Volume Allenante Totale (${weightUnit()})`;
 
         filteredDates.forEach(d => {
           const log = logs[d];
@@ -5716,7 +5763,7 @@
               totalVolume += (s.weight * s.reps);
               if (s.weight > topExWeight) {
                 topExWeight = s.weight;
-                topExName = `${item.exercise} (${s.weight}kg×${s.reps})`;
+                topExName = `${item.exercise} (${formatWeight(s.weight)}×${s.reps})`;
               }
             });
           });
@@ -6114,6 +6161,7 @@
           if (data.settings) {
             settings = Object.assign({}, DEFAULT_SETTINGS, data.settings);
             if (settings.bgMode === 'on') settings.bgMode = 'mix';
+            if (!['kg', 'lbs'].includes(settings.weightUnit)) settings.weightUnit = 'kg';
             saveSettings();
             applyTheme();
             renderSettingsUI();
