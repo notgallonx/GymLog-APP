@@ -1,0 +1,29 @@
+{
+  "id": "./index.html",
+  "name": "Gym Logbook Ultimate",
+  "short_name": "Gym Log",
+  "description": "Logbook di allenamento iOS Liquid Glass con timer preciso in background, calcolo 1RM e analisi progressi.",
+  "lang": "it",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#151924",
+  "theme_color": "#151924",
+  "categories": ["health", "fitness", "lifestyle"],
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
