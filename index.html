@@ -2838,7 +2838,7 @@
     .export-dates-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
+      gap: 12px;
       margin-top: 8px;
     }
 
@@ -2851,8 +2851,8 @@
       min-width: 0;
       max-width: 100%;
       margin-bottom: 0;
-      padding: 8px 4px;
-      font-size: 0.8rem;
+      padding: 8px 2px;
+      font-size: 0.75rem;
       font-weight: 700;
     }
 
@@ -7832,7 +7832,7 @@
       if (state.reason === 'no_logs') {
         previewEl.hidden = false;
         previewEl.className = 'export-preview-pill warn';
-        previewEl.innerHTML = `<span>📭 <strong>Nessun allenamento registrato</strong> nello storico. Registra almeno una sessione per esportare il PDF.</span>`;
+        previewEl.innerHTML = `<span><strong>Nessun allenamento registrato</strong> nello storico. Registra almeno una sessione per esportare il PDF.</span>`;
         if (exportBtn) exportBtn.disabled = true;
         return;
       }
