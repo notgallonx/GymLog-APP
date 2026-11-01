@@ -1009,6 +1009,11 @@
       color: #ffffff;
     }
 
+    .nav-btn[data-tab="progress"] {
+      font-size: 0.52rem;
+      letter-spacing: 0;
+    }
+
     .nav-btn svg {
       width: 20px;
       height: 20px;
@@ -2830,7 +2835,7 @@
       background: rgba(0, 0, 0, 0.24);
       border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 16px;
-      padding: 11px 11px;
+      padding: 11px 12px;
       margin-bottom: 10px;
       text-align: left;
     }
@@ -2838,7 +2843,7 @@
     .export-dates-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
+      gap: 13px;
       margin-top: 8px;
     }
 
@@ -3808,10 +3813,10 @@
         const logsCount = Object.keys(logs).length;
         if (logsCount >= 3) {
           banner.className = 'backup-status-banner warn';
-          banner.innerHTML = '⚠️ <strong>Nessun backup recente:</strong> Hai ' + logsCount + ' sessioni salvate. Esporta una copia di sicurezza!';
+          banner.innerHTML = '<strong>Nessun backup recente</strong>';
         } else {
           banner.className = 'backup-status-banner';
-          banner.innerHTML = 'ℹ️ Nessun backup ancora salvato su questo dispositivo.';
+          banner.innerHTML = 'Nessun backup salvato su questo dispositivo.';
         }
         return;
       }
