@@ -2837,14 +2837,21 @@
 
     .export-dates-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
       margin-top: 8px;
     }
 
+    .export-dates-grid > div {
+      min-width: 0;
+    }
+
     .export-dates-grid input[type="date"] {
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
       margin-bottom: 0;
-      padding: 8px 8px;
+      padding: 8px 4px;
       font-size: 0.8rem;
       font-weight: 700;
     }
