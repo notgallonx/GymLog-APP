@@ -7832,7 +7832,7 @@
       if (state.reason === 'no_logs') {
         previewEl.hidden = false;
         previewEl.className = 'export-preview-pill warn';
-        previewEl.innerHTML = `<span><strong>Nessun allenamento registrato</strong> nello storico. Registra almeno una sessione per esportare il PDF.</span>`;
+        previewEl.innerHTML = `<span><strong>Nessun allenamento registrato</strong> nello storico</span>`;
         if (exportBtn) exportBtn.disabled = true;
         return;
       }
