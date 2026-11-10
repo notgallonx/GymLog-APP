@@ -29,7 +29,7 @@
       --accent-gradient: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-dark) 100%);
       --accent-glow: rgba(var(--accent-rgb), 0.22);
       --accent-glow-strong: rgba(var(--accent-rgb), 0.38);
-      --accent-future: #f59e0b;
+      --accent-future: #c084fc;
       --text-primary: #f8fafc;
       --text-secondary: #94a3b8;
       --text-muted: #64748b;
@@ -1600,11 +1600,12 @@
     }
 
     .day-cell .dot {
-      width: 5px;
-      height: 5px;
+      width: 6px;
+      height: 6px;
       border-radius: 50%;
       position: absolute;
       bottom: 3.5px;
+      border: 1px solid rgba(255, 255, 255, 0.75);
     }
 
     .day-cell .dot.logged {
@@ -1615,11 +1616,14 @@
     .day-cell .dot.draft {
       background: var(--today-color);
       box-shadow: 0 0 6px var(--today-color);
+      border-radius: 1px;
     }
 
     .day-cell .dot.planned {
       background: var(--accent-future);
       box-shadow: 0 0 6px var(--accent-future);
+      border-radius: 1px;
+      transform: rotate(45deg);
     }
 
     .save-status-bar {
@@ -1834,6 +1838,12 @@
       grid-template-columns: 1fr 1fr;
       gap: 8px;
       margin-bottom: 10px;
+    }
+
+    @media (max-width: 600px) {
+      .period-picker-container {
+        grid-template-columns: minmax(0, 1fr);
+      }
     }
 
     .period-group {
@@ -2070,9 +2080,19 @@
     }
 
     .legend-dot {
-      width: 7px;
-      height: 7px;
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+    }
+
+    .legend-dot.draft {
+      border-radius: 1px;
+    }
+
+    .legend-dot.planned {
+      border-radius: 1px;
+      transform: rotate(45deg);
     }
 
     /* ═══════════════════════════════════════════════════════════
@@ -2353,6 +2373,9 @@
       align-items: center;
       gap: 14px;
       margin: 8px auto 10px auto;
+    }
+    #tab-settings .card:first-child > label {
+      margin-top: 12px;
     }
     .swatch {
       width: 36px;
@@ -3129,9 +3152,8 @@
       <p style="font-size:0.76rem; color:var(--text-secondary); margin-bottom:10px;">
         Scegli come importare i dati trovati nel file selezionato:
       </p>
-      <div class="import-summary-stats" id="import-summary-details"></div>
       <div style="display:flex; flex-direction:column; gap:8px;">
-        <button type="button" class="btn-primary" id="btn-import-merge" data-action="apply-backup" data-mode="merge">🔗 Unisci ai dati esistenti (Consigliato)</button>
+        <button type="button" class="btn-primary" id="btn-import-merge" data-action="apply-backup" data-mode="merge">🔗 Unisci ai dati esistenti</button>
         <button type="button" class="btn-danger" id="btn-import-replace" data-action="apply-backup" data-mode="replace">🔄 Sostituisci tutti i dati attuali</button>
         <button type="button" class="btn-secondary" id="btn-import-cancel" data-action="close-import-summary">Annulla</button>
       </div>
@@ -3172,13 +3194,13 @@
 
           <div class="legend">
             <div class="legend-item">
-              <div class="legend-dot" style="background: var(--accent-primary); box-shadow: 0 0 6px var(--accent-primary);"></div> Registrato
+              <div class="legend-dot logged" style="background: var(--accent-primary); box-shadow: 0 0 6px var(--accent-primary);"></div> Registrato
             </div>
             <div class="legend-item">
-              <div class="legend-dot" style="background: var(--today-color); box-shadow: 0 0 6px var(--today-color);"></div> In corso
+              <div class="legend-dot draft" style="background: var(--today-color); box-shadow: 0 0 6px var(--today-color);"></div> In corso
             </div>
             <div class="legend-item">
-              <div class="legend-dot" style="background: var(--accent-future); box-shadow: 0 0 6px var(--accent-future);"></div> Programmato
+              <div class="legend-dot planned" style="background: var(--accent-future); box-shadow: 0 0 6px var(--accent-future);"></div> Programmato
             </div>
           </div>
         </div>
@@ -3213,7 +3235,7 @@
             <input type="text" id="session-notes-input" placeholder="Note opzionali sulla sessione..." style="margin-bottom:0;">
           </div>
 
-          <div id="log-save-delete-row" style="display:grid; grid-template-columns: 1.5fr 1fr; gap:8px; margin-top:4px;">
+          <div id="log-save-delete-row" style="display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:8px; margin-top:4px;">
             <button class="btn-primary" id="btn-save-daily-log" data-action="save-daily-log">💾 Salva Sessione</button>
             <button class="btn-danger" id="btn-delete-daily-log" data-action="delete-daily-log">🗑️ Elimina</button>
           </div>
@@ -3275,7 +3297,7 @@
             </div>
             <label class="export-pr-option" for="export-include-pr">
               <input type="checkbox" id="export-include-pr">
-              <span>Includi sezione finale «Record personali»</span>
+              <span>Aggiungi una sezione finale Record Personali</span>
             </label>
           </div>
 
@@ -3436,6 +3458,7 @@
                   <option value="date_desc" selected>Data</option>
                   <option value="weight_desc">Peso</option>
                   <option value="name_asc">Nome esercizio</option>
+                  <option value="workout_asc">Scheda</option>
                 </select>
               </div>
             </div>
@@ -3504,7 +3527,7 @@
       <!-- TAB 5: IMPOSTAZIONI -->
       <section id="tab-settings" class="tab-content">
         <div class="card">
-          <div class="card-title">🔔 Avvisi & Recupero</div>
+          <div class="card-title">⚙️ Impostazioni & Personalizzazione</div>
           <div style="display:grid; grid-template-columns: 1.3fr 1fr; gap:8px; align-items:center; margin-bottom:10px;">
             <div>
               <label for="set-ringtone">Suoneria</label>
@@ -3543,25 +3566,13 @@
             <button type="button" class="tgl" id="tgl-notify" aria-label="Notifica Fine Pausa" data-action="toggle-setting" data-setting="notify"></button>
           </div>
 
-          <div class="set-row col" style="margin-bottom:0;">
+          <div class="set-row" style="margin: 10px 0 14px;">
             <div>
-              <label for="set-bgmode">Modalità Audio Pausa</label>
-              <div class="set-hint">Mixato con Musica mantiene il timer preciso in background senza mai interrompere Spotify o Apple Music.</div>
+              <label>Schermo Sempre Acceso</label>
+              <div class="set-hint">Evita il blocco schermo durante l'allenamento</div>
             </div>
-            <select id="set-bgmode">
-              <option value="mix">Mixato con Musica (Consigliato)</option>
-              <option value="off">Solo Avviso Visivo / Vibrazione</option>
-            </select>
+            <button type="button" class="tgl" id="tgl-keepAwake" aria-label="Schermo Sempre Acceso" data-action="toggle-setting" data-setting="keepAwake"></button>
           </div>
-        </div>
-
-        <div class="card">
-          <div class="card-title">🎨 Personalizzazione</div>
-          <label for="set-theme">Tema</label>
-          <select id="set-theme" style="margin-bottom:12px;">
-            <option value="dark">Scuro</option>
-            <option value="light">Chiaro</option>
-          </select>
           <label for="set-weight-unit">Unità di peso</label>
           <select id="set-weight-unit" style="margin-bottom:12px;">
             <option value="kg">Chilogrammi (kg)</option>
@@ -3569,13 +3580,6 @@
           </select>
           <label>Colore del Tema</label>
           <div class="swatches" id="set-swatches"></div>
-          <div class="set-row" style="margin-top: 10px; margin-bottom:0;">
-            <div>
-              <label>Schermo Sempre Acceso</label>
-              <div class="set-hint">Evita il blocco schermo durante l'allenamento</div>
-            </div>
-            <button type="button" class="tgl" id="tgl-keepAwake" aria-label="Schermo Sempre Acceso" data-action="toggle-setting" data-setting="keepAwake"></button>
-          </div>
         </div>
 
         <div class="card">
@@ -3750,7 +3754,7 @@
         'rest-status-badge', 'rest-progress-circle', 'rest-display',
         'rest-subtext', 'rest-start-btn', 'floating-rest-bar',
         'floating-progress-line', 'floating-rest-display', 'set-ringtone',
-        'set-volume', 'set-bgmode', 'set-theme', 'set-weight-unit', 'set-swatches', 'storage-persist-badge',
+        'set-volume', 'set-weight-unit', 'set-swatches', 'storage-persist-badge',
         'glass-confirm-modal', 'glass-confirm-card', 'glass-modal-icon',
         'glass-modal-title', 'glass-modal-text', 'glass-modal-cancel',
         'glass-modal-ok', 'plate-calc-modal', 'plate-calc-card',
@@ -4128,21 +4132,7 @@
       return `${(n / (1024 * 1024)).toFixed(1)} MB`;
     }
 
-    async function refreshStorageEstimate() {
-      if (!navigator.storage || typeof navigator.storage.estimate !== 'function') return;
-      try {
-        const est = await navigator.storage.estimate();
-        if (est && typeof est.usage === 'number') {
-          const usedStr = formatBytesHuman(est.usage);
-          if (typeof est.quota === 'number' && est.quota > 0) {
-            const pct = Math.min(100, Math.round((est.usage / est.quota) * 1000) / 10);
-            storageEstimateText = `Spazio usato: ${usedStr}${pct >= 0.1 ? ` (${pct}%)` : ''}`;
-          } else {
-            storageEstimateText = `Spazio usato: ${usedStr}`;
-          }
-        }
-      } catch (_) {}
-    }
+    
 
     async function initStoragePersistence() {
       const badge = DOM['storage-persist-badge'];
@@ -4926,12 +4916,13 @@
       theme: 'dark',
       weightUnit: 'kg'
     };
-    let settings = Object.assign({}, DEFAULT_SETTINGS, safeJsonParse('gym_settings', {}));
+    const savedSettings = safeJsonParse('gym_settings', {});
+    let settings = Object.assign({}, DEFAULT_SETTINGS, savedSettings);
     if (!['kg', 'lbs'].includes(settings.weightUnit)) settings.weightUnit = 'kg';
-    if (settings.bgMode === 'on') {
-      settings.bgMode = 'mix';
-      safeStorageSet('gym_settings', JSON.stringify(settings));
-    }
+    const settingsNeedMigration = settings.theme !== 'dark' || settings.bgMode !== 'mix';
+    settings.theme = 'dark';
+    settings.bgMode = 'mix';
+    if (settingsNeedMigration) safeStorageSet('gym_settings', JSON.stringify(settings));
 
     const ACCENTS = {
       sky: ['#38bdf8', '#0284c7', '56, 189, 248'], emerald: ['#34d399', '#059669', '52, 211, 153'],
@@ -4965,18 +4956,10 @@
       updateProgressChart();
     }
     function setSetting(k, v) {
+      if (k === 'theme') v = 'dark';
+      if (k === 'bgMode') v = 'mix';
       settings[k] = v; saveSettings();
       if (k === 'theme') applyTheme();
-      if (k === 'bgMode') {
-        document.body.classList.toggle('power-save-mode', v === 'off');
-        if (v === 'off') {
-          stopBgAlarm();
-          stopBgKeepAlive();
-        } else {
-          syncBgKeepAlive();
-          if (restTimerRunning) startBgAlarm(getRestRemainingMs() / 1000);
-        }
-      }
       if (k === 'keepAwake') { v ? requestWakeLock() : releaseWakeLock(); }
     }
     function toggleSetting(k) {
@@ -5008,10 +4991,9 @@
     function applyTheme() {
       const a = ACCENTS[settings.accent] || ACCENTS.sky, s = document.documentElement.style;
       s.setProperty('--accent-primary', a[0]); s.setProperty('--accent-dark', a[1]); s.setProperty('--accent-rgb', a[2]);
-      document.documentElement.dataset.theme = settings.theme === 'light' ? 'light' : 'dark';
-      document.body?.classList.toggle('power-save-mode', settings.bgMode === 'off');
+      document.documentElement.dataset.theme = 'dark';
       const themeColor = document.querySelector('meta[name="theme-color"]');
-      if (themeColor) themeColor.content = settings.theme === 'light' ? '#eef2f7' : '#151924';
+      if (themeColor) themeColor.content = '#151924';
       if (typeof renderCustomProgressChart === 'function' && currentChartPoints && currentChartPoints.length > 0) {
         renderCustomProgressChart();
       }
@@ -5031,8 +5013,6 @@
       }
       sel.value = settings.ringtone;
       DOM['set-volume'].value = settings.volume;
-      DOM['set-bgmode'].value = settings.bgMode === 'off' ? 'off' : 'mix';
-      DOM['set-theme'].value = settings.theme === 'light' ? 'light' : 'dark';
       DOM['set-weight-unit'].value = weightUnit();
       ['vibrate', 'notify', 'keepAwake', 'autoRest'].forEach(k => {
         const b = document.getElementById('tgl-' + k);
@@ -5090,7 +5070,6 @@
 
     // Mantiene attivo il clock hardware di WebKit in background con un segnale sub-udibile (ambient)
     function startBgKeepAlive() {
-      if (settings.bgMode === 'off') return;
       const ctx = ensureAudioContext();
       if (!ctx || keepAliveSourceNode) return;
       try {
@@ -5126,7 +5105,7 @@
     }
 
     function syncBgKeepAlive() {
-      if (settings.bgMode !== 'off' && (restTimerRunning || stopwatchRunning)) {
+      if (restTimerRunning || stopwatchRunning) {
         startBgKeepAlive();
       } else {
         stopBgKeepAlive();
@@ -5186,7 +5165,7 @@
     function startBgAlarm(sec) {
       stopBgAlarm();
       syncBgKeepAlive();
-      if (settings.bgMode === 'off' || settings.ringtone === 'none' || sec <= 0) return;
+      if (settings.ringtone === 'none' || sec <= 0) return;
       const ctx = ensureAudioContext();
       if (!ctx) return;
       const buf = getToneAudioBuffer(settings.ringtone);
@@ -5519,8 +5498,8 @@
             break;
           }
           case 'set-accent': {
-            const hex = actionEl.getAttribute('data-accent');
-            if (hex) setSetting('accent', hex);
+            const accent = actionEl.getAttribute('data-accent');
+            if (accent) setAccent(accent);
             break;
           }
           case 'apply-backup':
@@ -5551,6 +5530,12 @@
       }
       if (DOM['workout-select']) {
         DOM['workout-select'].addEventListener('change', onWorkoutSelectChange);
+      }
+      if (DOM['set-ringtone']) {
+        DOM['set-ringtone'].addEventListener('change', (e) => {
+          setSetting('ringtone', e.target.value);
+          if (restTimerRunning) startBgAlarm(getRestRemainingMs() / 1000);
+        });
       }
       if (DOM['session-notes-input']) {
         DOM['session-notes-input'].addEventListener('input', debouncedAutoSave);
@@ -6326,7 +6311,7 @@
     }
 
     function playRestEndBeep() {
-      if (scheduledAlarmPlayed || settings.bgMode === 'off' || settings.ringtone === 'none') {
+      if (scheduledAlarmPlayed || settings.ringtone === 'none') {
         scheduledAlarmPlayed = false;
         return;
       }
@@ -7842,7 +7827,7 @@
         DOM['btn-save-daily-log'].style.display = isReadOnlyPast ? 'none' : 'inline-flex';
       }
       if (DOM['log-save-delete-row']) {
-        DOM['log-save-delete-row'].style.gridTemplateColumns = isReadOnlyPast ? 'minmax(0, 280px)' : '1.5fr 1fr';
+        DOM['log-save-delete-row'].style.gridTemplateColumns = isReadOnlyPast ? 'minmax(0, 280px)' : 'repeat(2, minmax(0, 1fr))';
         DOM['log-save-delete-row'].style.justifyContent = isReadOnlyPast ? 'center' : '';
       }
 
@@ -8134,6 +8119,7 @@
         updatedAt: Date.now()
       };
       safeStorageSet('gym_drafts', JSON.stringify(drafts));
+      renderCalendar();
       updateSaveStatus();
     }
 
@@ -8156,7 +8142,7 @@
         const strong = document.createElement('strong');
         if (selectedDateStr > todayStr) {
           bar.className = 'save-status-bar';
-          bar.style.cssText = 'background: rgba(245, 158, 11, 0.12); border-color: rgba(245, 158, 11, 0.3); color: var(--accent-future);';
+          bar.style.cssText = 'background: rgba(245, 158, 11, 0.12); border-color: rgba(245, 158, 11, 0.3); color: var(--text-primary);';
           strong.textContent = 'Allenamento Programmato';
           span.append('📅 ', strong, ` per il ${formatDisplayDate(selectedDateStr)}`);
         } else {
@@ -8169,7 +8155,7 @@
       } else if (draft && selectedDateStr > todayStr) {
         const bar = document.createElement('div');
         bar.className = 'save-status-bar';
-        bar.style.cssText = 'background: rgba(245, 158, 11, 0.12); border-color: rgba(245, 158, 11, 0.3); color: var(--accent-future);';
+        bar.style.cssText = 'background: rgba(245, 158, 11, 0.12); border-color: rgba(245, 158, 11, 0.3); color: var(--text-primary);';
         const span = document.createElement('span');
         const strong = document.createElement('strong');
         strong.textContent = 'Scheda Programmata';
@@ -8186,12 +8172,11 @@
       if (!container) return;
 
       if (selectedDateStr !== todayStr) {
-        const modeLabel = isPastDateSelected() ? '' : ' (Programmato)';
         const banner = document.createElement('div');
         banner.className = 'today-jump-banner';
         const span = document.createElement('span');
         const strong = document.createElement('strong');
-        strong.textContent = `${formatDisplayDate(selectedDateStr)}${modeLabel}`;
+        strong.textContent = `${formatDisplayDate(selectedDateStr)}${''}`;
         span.append('📅 Data selezionata: ', strong);
 
         const btn = document.createElement('button');
@@ -8316,6 +8301,7 @@
       }
       if (DOM['btn-save-daily-log']) {
         DOM['btn-save-daily-log'].style.display = isPastDateSelected() ? 'none' : 'inline-flex';
+        DOM['btn-save-daily-log'].textContent = selectedDateStr > todayStr ? '📅 Programma' : '💾 Salva Sessione';
       }
 
       if (activeRecord && (activeRecord.workoutId || (Array.isArray(activeRecord.data) && activeRecord.data.length > 0))) {
@@ -8405,6 +8391,13 @@
       prEntries.sort((a, b) => {
         if (sortMode === 'name_asc') return a.exercise.localeCompare(b.exercise, 'it');
         if (sortMode === 'weight_desc') return (b.weight - a.weight) || (b.est1RM - a.est1RM);
+        if (sortMode === 'workout_asc') {
+          const aWorkout = workouts.find(w => w.id === a.workoutId)?.name || a.workoutName || 'Sessione';
+          const bWorkout = workouts.find(w => w.id === b.workoutId)?.name || b.workoutName || 'Sessione';
+          return aWorkout.localeCompare(bWorkout, 'it') ||
+            a.exercise.localeCompare(b.exercise, 'it') ||
+            b.date.localeCompare(a.date);
+        }
         // default: date_desc
         if (b.date !== a.date) return b.date.localeCompare(a.date);
         return b.est1RM - a.est1RM;
@@ -11030,7 +11023,8 @@
 
       if (dataToApply.settings && mode === 'replace') {
         settings = Object.assign({}, DEFAULT_SETTINGS, dataToApply.settings);
-        if (settings.bgMode === 'on') settings.bgMode = 'mix';
+        settings.theme = 'dark';
+        settings.bgMode = 'mix';
         if (!['kg', 'lbs'].includes(settings.weightUnit)) settings.weightUnit = 'kg';
         saveSettings();
         applyTheme();
