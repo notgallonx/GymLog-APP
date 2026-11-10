@@ -3236,8 +3236,8 @@
           </div>
 
           <div id="log-save-delete-row" style="display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:8px; margin-top:4px;">
-            <button class="btn-primary" id="btn-save-daily-log" data-action="save-daily-log">💾 Salva Sessione</button>
-            <button class="btn-danger" id="btn-delete-daily-log" data-action="delete-daily-log">🗑️ Elimina</button>
+            <button class="btn-primary" id="btn-save-daily-log" data-action="save-daily-log">Salva Sessione</button>
+            <button class="btn-danger" id="btn-delete-daily-log" data-action="delete-daily-log">Elimina</button>
           </div>
         </div>
       </section>
@@ -8301,7 +8301,7 @@
       }
       if (DOM['btn-save-daily-log']) {
         DOM['btn-save-daily-log'].style.display = isPastDateSelected() ? 'none' : 'inline-flex';
-        DOM['btn-save-daily-log'].textContent = selectedDateStr > todayStr ? '📅 Programma' : '💾 Salva Sessione';
+        DOM['btn-save-daily-log'].textContent = selectedDateStr > todayStr ? 'Programma' : 'Salva Sessione';
       }
 
       if (activeRecord && (activeRecord.workoutId || (Array.isArray(activeRecord.data) && activeRecord.data.length > 0))) {
