@@ -11,6 +11,7 @@
   "orientation": "portrait",
   "background_color": "#151924",
   "theme_color": "#151924",
+  "prefer_related_applications": false,
   "categories": ["health", "fitness", "lifestyle"],
   "icons": [
     {
@@ -24,6 +25,50 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Nuovo allenamento",
+      "short_name": "Allenamento",
+      "description": "Registra subito la sessione di oggi",
+      "url": "./index.html?tab=log",
+      "icons": [
+        {
+          "src": "icon.png",
+          "sizes": "512x512",
+          "type": "image/png",
+          "purpose": "any"
+        }
+      ]
+    },
+    {
+      "name": "Timer Recupero",
+      "short_name": "Timer",
+      "description": "Apri cronometro e timer di recupero",
+      "url": "./index.html?tab=timer",
+      "icons": [
+        {
+          "src": "icon.png",
+          "sizes": "512x512",
+          "type": "image/png",
+          "purpose": "any"
+        }
+      ]
+    },
+    {
+      "name": "Progressi & Record",
+      "short_name": "Record",
+      "description": "Consulta grafici 1RM e bacheca record",
+      "url": "./index.html?tab=progress",
+      "icons": [
+        {
+          "src": "icon.png",
+          "sizes": "512x512",
+          "type": "image/png",
+          "purpose": "any"
+        }
+      ]
     }
   ]
 }
