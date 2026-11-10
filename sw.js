@@ -1,4 +1,4 @@
-const CACHE_NAME = "gym-log-cache-v17";
+const CACHE_NAME = "gym-log-cache-v18";
 const LOCAL_FILES = ["./", "./index.html", "./manifest.json", "./icon.png"];
 const CDN_FILES = [
   "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js",
