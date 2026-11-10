@@ -3683,9 +3683,13 @@
         const existing = document.querySelector(`script[src="${src}"]`);
         if (existing) {
           if (existing.dataset.loaded === '1') return resolve();
-          existing.addEventListener('load', () => resolve(), { once: true });
-          existing.addEventListener('error', () => reject(new Error(`Impossibile caricare ${src}`)), { once: true });
-          return;
+          if (existing.dataset.failed === '1') {
+            existing.remove();
+          } else {
+            existing.addEventListener('load', () => resolve(), { once: true });
+            existing.addEventListener('error', () => reject(new Error(`Impossibile caricare ${src}`)), { once: true });
+            return;
+          }
         }
         const s = document.createElement('script');
         s.src = src;
@@ -3694,7 +3698,10 @@
           s.dataset.loaded = '1';
           resolve();
         };
-        s.onerror = () => reject(new Error(`Impossibile caricare ${src}`));
+        s.onerror = () => {
+          s.dataset.failed = '1';
+          reject(new Error(`Impossibile caricare ${src}`));
+        };
         document.head.appendChild(s);
       });
     }
@@ -5471,11 +5478,13 @@
           case 'set-export-range':
             setExportQuickRange(actionEl.getAttribute('data-exp-range'));
             break;
+          case 'export-pdf':
           case 'export-backup':
             exportBackup();
             break;
+          case 'import-pdf':
           case 'trigger-import':
-            if (DOM['import-file']) DOM['import-file'].click();
+            triggerImportPicker();
             break;
           case 'switch-progress-view':
             switchProgressSubView(actionEl.getAttribute('data-pview'));
@@ -5530,8 +5539,8 @@
       if (DOM['export-date-end']) {
         DOM['export-date-end'].addEventListener('change', onManualExportDateChange);
       }
-      if (DOM['import-file']) {
-        DOM['import-file'].addEventListener('change', importBackup);
+      if (DOM['import-file-input']) {
+        DOM['import-file-input'].addEventListener('change', importBackup);
       }
       ['start-month', 'start-year', 'end-month', 'end-year'].forEach(id => {
         if (DOM[id]) DOM[id].addEventListener('change', onManualPeriodChange);
