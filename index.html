@@ -5370,9 +5370,11 @@
           case 'switch-tab':
             switchTab(actionEl.getAttribute('data-tab'), actionEl);
             break;
+          case 'open-plate-calc':
           case 'open-plate-modal':
             openPlateModal();
             break;
+          case 'close-plate-calc':
           case 'close-plate-modal':
             closePlateModal();
             break;
@@ -5385,6 +5387,7 @@
           case 'step-plate':
             stepPlateWeight(Number(actionEl.getAttribute('data-delta')));
             break;
+          case 'close-edit-set':
           case 'close-edit-set-modal':
             closeEditSetModal();
             break;
@@ -5427,6 +5430,7 @@
           case 'change-month':
             changeMonth(parseInt(actionEl.getAttribute('data-delta'), 10));
             break;
+          case 'quick-start-rest':
           case 'quick-start-rest-log':
             quickStartRestFromLog();
             break;
@@ -5448,6 +5452,7 @@
           case 'show-record-exercise':
             showRecordExercise(parseInt(actionEl.getAttribute('data-ex-idx'), 10));
             break;
+          case 'toggle-builder':
           case 'toggle-builder-drawer':
             toggleWorkoutBuilderDrawer();
             break;
@@ -5463,6 +5468,7 @@
           case 'remove-builder-row':
             removeBuilderExerciseRow(parseInt(actionEl.getAttribute('data-b-idx'), 10));
             break;
+          case 'save-workout':
           case 'save-workout-scheme':
             addWorkoutScheme();
             break;
@@ -5517,8 +5523,24 @@
             if (hex) setSetting('accent', hex);
             break;
           }
+          case 'apply-backup':
+            applyBackupData(actionEl.getAttribute('data-mode') === 'replace' ? 'replace' : 'merge');
+            break;
+          case 'close-import-summary':
+            closeImportSummaryModal();
+            break;
+          case 'toggle-setting': {
+            const tKey = actionEl.getAttribute('data-setting');
+            if (tKey) setSetting(tKey, !settings[tKey]);
+            renderSettingsUI();
+            break;
+          }
+          case 'reset-settings':
+            resetSettings();
+            break;
+          case 'preview-ringtone':
           case 'test-ringtone':
-            testSelectedRingtone();
+            previewRingtone();
             break;
         }
       });
