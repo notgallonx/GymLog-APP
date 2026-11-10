@@ -1,4 +1,4 @@
-const CACHE_NAME = "gym-log-cache-v13";
+const CACHE_NAME = "gym-log-cache-v17";
 const LOCAL_FILES = ["./", "./index.html", "./manifest.json", "./icon.png"];
 const CDN_FILES = [
   "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js",
@@ -11,18 +11,23 @@ self.addEventListener("install", (event) => {
     (async () => {
       const cache = await caches.open(CACHE_NAME);
       await cache.addAll(LOCAL_FILES);
-      await Promise.allSettled(
-        CDN_FILES.map(async (url) => {
-          try {
-            const res = await fetch(url, { mode: "cors" });
-            if (res && (res.ok || res.type === "opaque")) {
-              await cache.put(url, res);
+
+      // Pre-cache opzionale e non bloccante delle librerie CDN solo se online
+      if (!self.navigator || self.navigator.onLine !== false) {
+        Promise.allSettled(
+          CDN_FILES.map(async (url) => {
+            try {
+              const res = await fetch(url, { mode: "cors" });
+              if (res && (res.ok || res.type === "opaque")) {
+                await cache.put(url, res);
+              }
+            } catch (_) {
+              // Ignora errori di rete: le librerie CDN vengono caricate on-demand e cachate al primo uso
             }
-          } catch (_) {
-            // Ignora errori di rete in install per non bloccare l'installazione offline-first
-          }
-        })
-      );
+          })
+        );
+      }
+
       // Attiva subito solo alla prima installazione (nessun client già controllato);
       // negli aggiornamenti successivi attende conferma dell'utente tramite SKIP_WAITING.
       const existingClients = await self.clients.matchAll({ type: "window" });
@@ -40,6 +45,11 @@ self.addEventListener("activate", (event) => {
       await Promise.all(
         keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))
       );
+      if (self.registration && self.registration.navigationPreload) {
+        try {
+          await self.registration.navigationPreload.enable();
+        } catch (_) {}
+      }
       await self.clients.claim();
     })()
   );
@@ -58,52 +68,70 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(req.url);
   if (url.protocol !== "http:" && url.protocol !== "https:") return;
 
+  const isOffline = self.navigator && self.navigator.onLine === false;
   const isImmutableCdn = CDN_FILES.includes(req.url) || url.hostname === "cdnjs.cloudflare.com";
 
   // 1. Librerie CDN versionate: Cache-First pura (nessun refetch inutile in background)
   if (isImmutableCdn) {
     event.respondWith(
-      caches.match(req).then((cached) => {
+      (async () => {
+        const cached = await caches.match(req);
         if (cached) return cached;
-        return fetch(req, { mode: "cors" })
-          .then((res) => {
-            if (res && (res.ok || res.type === "opaque")) {
-              const copy = res.clone();
-              caches.open(CACHE_NAME).then((cache) => cache.put(req, copy)).catch(() => {});
-            }
-            return res;
-          })
-          .catch(() => cached || Response.error());
-      })
+        if (isOffline) return Response.error();
+        try {
+          const res = await fetch(req, { mode: "cors" });
+          if (res && (res.ok || res.type === "opaque")) {
+            const copy = res.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(req, copy)).catch(() => {});
+          }
+          return res;
+        } catch (_) {
+          return cached || Response.error();
+        }
+      })()
     );
     return;
   }
 
-  // 2. Risorse locali / App Shell: Stale-While-Revalidate con fallback offline a index.html
+  // 2. Risorse locali / App Shell: Stale-While-Revalidate + navigationPreload, zero fetch inutili offline
   event.respondWith(
-    caches.match(req, { ignoreSearch: true }).then((cached) => {
-      const networkFetch = fetch(req)
-        .then((response) => {
-          if (response && response.ok) {
-            const copy = response.clone();
+    (async () => {
+      const cached = await caches.match(req, { ignoreSearch: true });
+
+      const revalidateFromNetwork = async () => {
+        if (isOffline) return null;
+        try {
+          const preloadRes = await event.preloadResponse;
+          if (preloadRes && preloadRes.ok) {
+            const copy = preloadRes.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(req, copy)).catch(() => {});
+            return preloadRes;
+          }
+          const networkRes = await fetch(req);
+          if (networkRes && networkRes.ok) {
+            const copy = networkRes.clone();
             caches.open(CACHE_NAME).then((cache) => cache.put(req, copy)).catch(() => {});
           }
-          return response;
-        })
-        .catch(() => null);
+          return networkRes;
+        } catch (_) {
+          return null;
+        }
+      };
 
       if (cached) {
-        event.waitUntil(networkFetch);
+        if (!isOffline) {
+          event.waitUntil(revalidateFromNetwork());
+        }
         return cached;
       }
 
-      return networkFetch.then((res) => {
-        if (res) return res;
-        if (req.mode === "navigate") {
-          return caches.match("./index.html");
-        }
-        return Response.error();
-      });
-    })
+      const res = await revalidateFromNetwork();
+      if (res) return res;
+      if (req.mode === "navigate") {
+        const fallback = await caches.match("./index.html");
+        if (fallback) return fallback;
+      }
+      return Response.error();
+    })()
   );
 });
